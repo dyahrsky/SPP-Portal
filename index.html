@@ -8,7 +8,7 @@
     /* HEADER */
     .header {
       background-color: #ffffff;
-      height: 1cm;
+      height: 1.5cm;
       display: flex;
       align-items: center;
       padding-left: 25px;
@@ -20,7 +20,7 @@
     }
     .baris-atas {
       font-family: Tahoma, sans-serif;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: bold;
       color: rgb(0, 0, 0);
       line-height: 1.2;
@@ -28,13 +28,13 @@
     }
     .baris-bawah {
       font-family: Tahoma, sans-serif;
-      font-size: 10px;
+      font-size: 12px;
       color: rgb(0, 0, 0);
       line-height: 1.2;
     }
     .header img {
       height: 80%;
-      margin-right: 4px
+      margin-right: 3px
     }
 
     body {
@@ -44,16 +44,17 @@
       background-position: center;
     }
     .overlay {
-      background-color: rgba(255, 255, 255, 0.233); /* semi transparan putih */
+      background-color: rgba(46, 46, 46, 0.486); /* semi transparan putih */
       min-height: 100vh;
       padding: 50px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 40px;
     }
 
     .kiri {
-      max-width: 45%;
+      flex: 1;
 
     }
 
@@ -61,9 +62,9 @@
     .main-title {
       font-family: 'Bebas Neue', sans-serif;
       font-weight: bold;
-      font-size: 80px;
+      font-size: 90px;
       text-align: center;
-      color: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
       margin-top: 20px;
     }
 
@@ -73,14 +74,14 @@
       font-family: 'Bebas Neue', sans-serif;
       font-size: 18px;
       text-align: center;
-      padding-left: 3cm;
-      padding-right: 3cm;
-      color: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
     }
     .kanan {
+      flex: 1;
       display: grid;
-      grid-template-columns: repeat(2, 120px);
+      grid-template-columns: repeat(3, 120px);
       gap: 20px;
+      justify-content: center;
     }
 
     /* KOTAK MENU */
