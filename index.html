@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SPP Portal</title>
   <style>
-    /* HEADER */
+/*HEADER*/
     .header {
       background-color: #ffffff;
       height: 1.5cm;
@@ -36,15 +36,15 @@
       height: 80%;
       margin-right: 2px
     }
-
+/*BODY*/
     body {
       margin: 0;
-      background-image: url('bg.jpg'); /* ganti nama file sesuai gambar kamu */
+      background-image: url('bg.jpg');
       background-size: cover;
       background-position: center;
     }
     .overlay {
-      background-color: rgba(46, 46, 46, 0.712); /* semi transparan putih */
+      background-color: rgba(46, 46, 46, 0.712);
       min-height: 100vh;
       padding: 50px;
       display: flex;
@@ -55,10 +55,8 @@
 
     .kiri {
       flex: 1;
-
     }
-
-    /* JUDUL UTAMA */
+/*TEXT*/
     .main-title {
       font-family: 'Bebas Neue', sans-serif;
       font-weight: bold;
@@ -67,25 +65,24 @@
       color: rgb(255, 255, 255);
       margin-top: 20px;
     }
-
-    /* DESKRIPSI */
     .description {
-      margin-top: 0.5cm;
+      max-width: 600px;
+      margin-top: 0 auto;
       font-family: 'Bebas Neue', sans-serif;
       font-size: 18px;
+      padding: 20px;
       text-align: center;
       color: rgb(255, 255, 255);
     }
     .kanan {
-      flex: 1;
+      flex: 1.5;
       display: grid;
-      grid-template-columns: repeat(2, 150px);
+      grid-template-columns: repeat(3, 150px);
       gap: 20px;
       justify-content: center;
+      max-width: 500px;
     }
-    
-
-    /* KOTAK MENU */
+/*BOX*/
     .menu-box {
       width: 200px;
       height: 120px;
@@ -100,13 +97,11 @@
       text-decoration: none;
       transition: background-color 0.2s;
     }
-
     .menu-box:hover {
       background-color: #0000CD;
       color : black
     }
-
-    /* FOOTER */
+/* FOOTER */
     .footer {
       background-color: #e0e0e0;
       height: 1cm;
@@ -121,8 +116,7 @@
   </style>
 </head>
 <body>
-
-  <!-- HEADER -->
+<!--HEADER-->
   <div class="header">
     <img src="Logo.png" alt="Logo BMKG">
     <div class="judul-header">
@@ -130,14 +124,13 @@
     <div class="baris-bawah">Tim Standarisasi, Prosedur, dan Personil</div>
   </div>
   </div>
-
-  <!-- body -->
+<!--TEXT-->
    <div class="overlay">
     <div class="kiri">
      <div class="main-title">SPP Portal</div>
      <div class="description">SPP Portal merupakan sistem informasi internal yang dirancang untuk menghimpun, mengelola, dan menampilkan seluruh data pekerjaan yang terkait dengan kegiatan Standarisasi Prosedur dan Personil (SPP) di lingkungan Direktorat Meteorologi Penerbangan BMKG. Portal ini berfungsi sebagai wadah integrasi data kegiatan, dokumentasi proses kerja, serta arsip digital sehingga memudahkan koordinasi, transparansi, serta monitoring capaian yang berkaitan dengan prosedur dan personil. Seluruh data yang masuk ke dalam portal ini dikelola secara terstruktur guna mendukung efisiensi kerja dan peningkatan kualitas pelayanan.</div>
         </div>
-  <!-- KOTAK MENU -->
+<!--BOX-->
   <div class="kanan">
     <a href="pageA.html" class="menu-box">A</a>
     <a href="pageB.html" class="menu-box">B</a>
@@ -146,9 +139,8 @@
     <a href="pageE.html" class="menu-box">E</a>
     <a href="pageF.html" class="menu-box">F</a>
   </div>
-
-  <!-- FOOTER -->
+   </div>
+<!-- FOOTER -->
   <div class="footer">by dyahbmkg @ 2025</div>
-
 </body>
 </html>
