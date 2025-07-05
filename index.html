@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPP Portal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Tahoma, sans-serif;
+      background-color: #ffffff;
+    }
+
+    /* HEADER */
+    .header {
+      background-color: #e0e0e0;
+      height: 5cm;
+      border-bottom: 2px solid black;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+    }
+
+    .header img {
+      height: 80%;
+    }
+
+    /* JUDUL UTAMA */
+    .main-title {
+      text-align: center;
+      font-size: 25px;
+      color: black;
+      margin-top: 20px;
+    }
+
+    /* DESKRIPSI */
+    .description {
+      margin-left: 3cm;
+      margin-top: 3cm;
+      font-size: 15px;
+      color: black;
+    }
+
+    /* KOTAK MENU */
+    .box-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      margin: 3cm auto;
+      width: 80%;
+      max-width: 800px;
+    }
+
+    .menu-box {
+      background-color: #e0e0e0;
+      border: 1px solid black;
+      border-radius: 10px;
+      text-align: center;
+      padding: 30px 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: black;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+
+    .menu-box:hover {
+      background-color: #d0d0d0;
+    }
+
+    /* FOOTER */
+    .footer {
+      background-color: #e0e0e0;
+      height: 1cm;
+      text-align: center;
+      font-size: 7px;
+      color: black;
+      line-height: 1cm;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="https://seeklogo.com/images/B/bmkg-logo-1AC50C168E-seeklogo.com.png" alt="Logo BMKG">
+  </div>
+
+  <!-- JUDUL -->
+  <div class="main-title">SPP Portal</div>
+
+  <!-- DESKRIPSI -->
+  <div class="description">SPP portal adalah</div>
+
+  <!-- KOTAK MENU -->
+  <div class="box-container">
+    <a href="pageA.html" class="menu-box">A</a>
+    <a href="pageB.html" class="menu-box">B</a>
+    <a href="pageC.html" class="menu-box">C</a>
+    <a href="pageD.html" class="menu-box">D</a>
+    <a href="pageE.html" class="menu-box">E</a>
+    <a href="pageF.html" class="menu-box">F</a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">by dyahbmkg @ 2025</div>
+
+</body>
+</html>
