@@ -97,6 +97,36 @@
       gap: 50px 80px;
       justify-content: center;
     }
+/*DROPDOWN REGULASI*/
+    .ddreg {
+      position: relative;
+      display: inline-block;
+    }
+    .ddreg-content {
+      display: none;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.85);
+      min-width: 150px;
+      border: 1px solid white;
+      border-radius: 8px;
+      z-index: 1;
+      margin-top: 5px;
+    }
+    .ddreg-content Regulasi {
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      display: block;
+      font-size: 14px;
+      font-family: Tahoma, sans-serif;
+    }
+    .ddreg-content Regulasi:hover {
+      background-color: #0000CD;
+      color: black;
+    }
+    .ddreg:hover .ddreg-content {
+       display: block;
+    }
 /* FOOTER */
     .footer {
       background-color: #e0e0e0;
@@ -129,19 +159,20 @@
 <!--BOX-->
   <div class="kanan">
     <div class="dropdown">
-  <div class="menu-box">A</div>
+    <a href="pageA.html" class="menu-box">ISO (Web Map)</a>
+    <a href="pageB.html" class="menu-box">ISO Maps</a>
+    <a href="pageC.html" class="menu-box">AIP</a>
+    <a href="pageD.html" class="menu-box">AIMP</a>
+    <a href="pageE.html" class="menu-box">AUDIT</a>
+<div class="dropdown">
+  <div class="menu-box">Regulasi</div>
   <div class="dropdown-content">
     <a href="#">Forecasts</a>
     <a href="#">observations</a>
     <a href="#">Lainnya</a>
   </div>
+</div>  
 </div>
-    <a href="pageB.html" class="menu-box">Web Map ISO</a>
-    <a href="pageC.html" class="menu-box">ISO Maps</a>
-    <a href="pageD.html" class="menu-box">AIMP</a>
-    <a href="pageE.html" class="menu-box">AIP</a>
-    <a href="pageF.html" class="menu-box">AUDIT</a>
-  </div>
    </div>
 <!-- FOOTER -->
   <div class="footer">by dyahbmkg @ 2025</div>
