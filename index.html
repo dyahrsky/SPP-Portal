@@ -24,7 +24,7 @@
       font-weight: bold;
       color: rgb(0, 0, 0);
       line-height: 1.2;
-      margin-bottom: 4px
+      margin-bottom: 3px
     }
     .baris-bawah {
       font-family: Tahoma, sans-serif;
@@ -34,19 +34,35 @@
     }
     .header img {
       height: 80%;
-      margin-right: 8px
+      margin-right: 4px
     }
 
-    body {
+    .body {
       margin: 0;
-      background-color: #94939456;
+      background-image: url('bg.jpg'); /* ganti nama file sesuai gambar kamu */
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(4px);
+    }
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.6); /* semi transparan putih */
+      min-height: 100vh;
+      padding: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kiri {
+      max-width: 45%;
+
     }
 
     /* JUDUL UTAMA */
     .main-title {
       font-family: 'Bebas Neue', sans-serif;
       font-weight: bold;
-      font-size: 100px;
+      font-size: 80px;
       text-align: center;
       color: rgb(0, 0, 0);
       margin-top: 20px;
@@ -62,34 +78,31 @@
       padding-right: 3cm;
       color: rgb(0, 0, 0);
     }
-
-    /* KOTAK MENU */
-    .box-container {
+    .kanan {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 120px);
       gap: 20px;
-      justify-content: center;
-      align-items: center;
-      margin: 3cm auto;
-      width: 80%;
-      max-width: 800px;
     }
 
+    /* KOTAK MENU */
     .menu-box {
-      background-color: #e0e0e0;
-      border: 1px solid black;
+      width: 120px;
+      height: 120px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgb(255, 255, 255);
       border-radius: 10px;
+      color: rgb(255, 255, 255);
       text-align: center;
+      line-height: 120px;
       padding: 30px 0;
-      font-size: 18px;
       font-weight: bold;
-      color: black;
       text-decoration: none;
       transition: background-color 0.2s;
     }
 
     .menu-box:hover {
       background-color: #d0d0d0;
+      color : black
     }
 
     /* FOOTER */
@@ -117,14 +130,14 @@
   </div>
   </div>
 
-  <!-- JUDUL -->
-  <div class="main-title">SPP Portal</div>
-
-  <!-- DESKRIPSI -->
-  <div class="description">SPP Portal merupakan sistem informasi internal yang dirancang untuk menghimpun, mengelola, dan menampilkan seluruh data pekerjaan yang terkait dengan kegiatan Standarisasi Prosedur dan Personil (SPP) di lingkungan Direktorat Meteorologi Penerbangan BMKG. Portal ini berfungsi sebagai wadah integrasi data kegiatan, dokumentasi proses kerja, serta arsip digital sehingga memudahkan koordinasi, transparansi, serta monitoring capaian yang berkaitan dengan prosedur dan personil. Seluruh data yang masuk ke dalam portal ini dikelola secara terstruktur guna mendukung efisiensi kerja dan peningkatan kualitas pelayanan.</div>
-
+  <!-- body -->
+   <div class="overlay">
+    <div class="kiri">
+     <div class="main-title">SPP Portal</div>
+     <div class="description">SPP Portal merupakan sistem informasi internal yang dirancang untuk menghimpun, mengelola, dan menampilkan seluruh data pekerjaan yang terkait dengan kegiatan Standarisasi Prosedur dan Personil (SPP) di lingkungan Direktorat Meteorologi Penerbangan BMKG. Portal ini berfungsi sebagai wadah integrasi data kegiatan, dokumentasi proses kerja, serta arsip digital sehingga memudahkan koordinasi, transparansi, serta monitoring capaian yang berkaitan dengan prosedur dan personil. Seluruh data yang masuk ke dalam portal ini dikelola secara terstruktur guna mendukung efisiensi kerja dan peningkatan kualitas pelayanan.</div>
+        </div>
   <!-- KOTAK MENU -->
-  <div class="box-container">
+  <div class="kanan">
     <a href="pageA.html" class="menu-box">A</a>
     <a href="pageB.html" class="menu-box">B</a>
     <a href="pageC.html" class="menu-box">C</a>
