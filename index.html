@@ -5,25 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SPP Portal</title>
   <style>
+    /* HEADER */
+    .header {
+      background-color: #000000;
+      height: 1cm;
+      display: flex;
+      align-items: center;
+      padding-left: 25px;
+    }
+    .judul-header {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .baris-atas {
+      font-family: Tahoma, sans-serif;
+      font-size: 25px;
+      font-weight: bold;
+      color: rgb(255, 255, 255);
+      line-height: 1.2;
+    }
+    .baris-bawah {
+      font-family: Tahoma, sans-serif;
+      font-size: 16px;
+      color: rgb(255, 255, 255);
+      line-height: 1.2;
+    }
+    .header img {
+      height: 80%;
+    }
+
     body {
       margin: 0;
       font-family: 'Bebas Neue', sans-serif;
       font-weight: bold;
-      font-size: 40;
-      background-color: #ffffff;
-    }
-
-    /* HEADER */
-    .header {
-      background-color: #e0e0e0;
-      height: 1cm;
-      display: flex;
-      align-items: center;
-      padding-left: 20px;
-    }
-
-    .header img {
-      height: 80%;
+      font-size: 100;
+      background-color: #b4a7ff;
     }
 
     /* JUDUL UTAMA */
@@ -89,7 +106,11 @@
 
   <!-- HEADER -->
   <div class="header">
-    <img src="https://seeklogo.com/images/B/bmkg-logo-1AC50C168E-seeklogo.com.png" alt="Logo BMKG">
+    <img src="https://cuaca.bmkg.go.id/bmkglogowht-01.png" alt="Logo BMKG">
+    <div class="judul-header">
+    <div class="baris-atas">Direktorat Meteorologi Penerbangan</div>
+    <div class="baris-bawah">Tim Standarisasi, Prosedur, dan Personil</div>
+  </div>
   </div>
 
   <!-- JUDUL -->
