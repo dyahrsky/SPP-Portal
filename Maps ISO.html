@@ -86,11 +86,7 @@ const SimbolisasiSiklus = {
 };
 function Simbolisasis25(Siklus25) {
   const color = SimbolisasiSiklus[Siklus25.toLowerCase()];
-  return L.icon({
-    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
-  });
+  return CustomWarna(color);
 }
 // Load data dari Google Sheets
 Tabletop.init({
@@ -106,17 +102,17 @@ Tabletop.init({
       let SimbolisasiStatus = row["ISO"].toLowerCase() === "sudah tersertifikasi iso" ? SudahSertif : BelumSertif;
       const MarkerISO = L.marker([lat, lng], { icon: SimbolisasiStatus })
         .bindPopup(`
-        <b>${row["ICAO_CODE"]}</b><br>
-        Kode ICAO : ${row["ICAO_CODE"]}
-        Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}</br><br>
-        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}</br><br>
-        Siklus 2019 : ${row["SIKLUS 2019"]}
-        Siklus 2020 : ${row["SIKLUS 2020"]}
-        Siklus 2021 : ${row["SIKLUS 2021"]}
-        Siklus 2022 : ${row["SIKLUS 2022"]}
-        Siklus 2023 : ${row["SIKLUS 2023"]}
-        Siklus 2024 : ${row["SIKLUS 2024"]}
-        Siklus 2025 : ${row["SIKLUS 2025"]}
+        <b>${row["STASIUN"]}</b><br>
+        Kode ICAO : ${row["ICAO_CODE"]}<br>
+        Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}<br>
+        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}<br>
+        Siklus 2019 : ${row["SIKLUS 2019"]}<br>
+        Siklus 2020 : ${row["SIKLUS 2020"]}<br>
+        Siklus 2021 : ${row["SIKLUS 2021"]}<br>
+        Siklus 2022 : ${row["SIKLUS 2022"]}<br>
+        Siklus 2023 : ${row["SIKLUS 2023"]}<br>
+        Siklus 2024 : ${row["SIKLUS 2024"]}<br>
+        Siklus 2025 : ${row["SIKLUS 2025"]}<br>
         `);
         
       MarkerISO.addTo(ISOLayer);
@@ -126,9 +122,9 @@ Tabletop.init({
       if (SimbolisasiSiklus[Siklus25]) {
         const markerSiklus25 = L.marker([lat, lng], { icon: Simbolisasis25(Siklus25) })
           .bindPopup(`
-        <b>${row["ICAO_CODE"]}</b><br>
-        Kode ICAO : ${row["KABUPATEN"]}<br>
-        Lokasi : ${row["KABUPATEN"]}, ${row["provinsi"]}<br>
+        <b>${row["STASIUN"]}</b><br>
+        Kode ICAO : ${row["ICAO_CODE"]}<br>
+        Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}<br>
         Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}<br>
         Siklus 2025 : ${row["SIKLUS 2025"]}
         `);
