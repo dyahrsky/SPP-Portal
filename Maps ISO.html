@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ISO Maps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    .map { height: 100vh; }
+    .header {
+      background-color: #ffffff;
+      height: 57px;
+      display: flex;
+      align-items: center;
+      padding-left: 25px;
+      position: fixed;
+      width: 100%;
+    }
+    .judul-header {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .baris-atas {
+      font-family: Tahoma, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      color: rgb(0, 0, 0);
+      line-height: 1.2;
+      margin-bottom: 3px
+    }
+    .baris-bawah {
+      font-family: Tahoma, sans-serif;
+      font-size: 14px;
+      color: rgb(0, 0, 0);
+      line-height: 1.2;
+    }
+    .header img {
+      height: 80%;
+      margin-right: 2px }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="Logo.png" alt="Logo BMKG">
+    <div class="judul-header">
+    <div class="baris-atas">Direktorat Meteorologi Penerbangan</div>
+    <div class="baris-bawah">Tim Standarisasi, Prosedur, dan Personil</div>
+  </div>
+  </div>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tabletop@1.6.0/tabletop.min.js"></script>
+  <script>
+    const map = L.map('map').setView([-1.3402691200284602, 118.389459726493], 5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; CartoDB'
+    }).addTo(map);
+/*COBA*/
+function CustomWarna(colorName) {
+  return L.divIcon({
+    html: `<div style="
+      background-color: ${colorName};
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 3px rgba(0,0,0,0.5);">
+    </div>`,
+    iconSize: [25, 25],
+    className: ""
+  });
+}
+const ISOLayer = L.layerGroup();
+const SiklusIso25Layer = L.layerGroup();
+const SudahSertif = L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png', iconSize: [25, 41], iconAnchor: [12, 41] });
+const BelumSertif = L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', iconSize: [25, 41], iconAnchor: [12, 41] });
+const SimbolisasiSiklus = {
+  'Surveillance 0': 'SkyBlue',
+  'Surveillance 1': 'Turquoise',
+  'Surveillance 2': 'Orange',
+  'Surveillance 3': 'Red',
+  'Renewal' : 'Crimson',
+  'Rencana Sertifikasi' : 'Violet',
+  'Belum Bersertifikat' : 'Darkgrey'
+};
+function Simbolisasis25(Siklus25) {
+  const color = SimbolisasiSiklus[Siklus25.toLowerCase()];
+  return L.icon({
+    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+  });
+}
+// Load data dari Google Sheets
+Tabletop.init({
+  key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pubhtml",
+  wanted: ["ISO"],
+  callback: function(data) {
+    data.forEach(row => {
+      const lat = parseFloat(row.LAT);
+      const lng = parseFloat(row.LONG);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      // === LAYER BERDASARKAN STATUS ISO ===
+      let SimbolisasiStatus = row["ISO"].toLowerCase() === "Sudah Tersertifikasi ISO" ? iconSudah : iconBelum;
+      const MarkerISO = L.marker([lat, lng], { icon: SimbolisasiStatus })
+        .bindPopup(`
+        <b>${row["ICAO_CODE"]}</b><br>
+        Kode ICAO : ${row["KABUPATEN"]}
+        Lokasi : ${row["KABUPATEN"]}, ${row["provinsi"]}</br><br>
+        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}</br><br>
+        Siklus 2019 : ${row["SIKLUS 2019"]}
+        Siklus 2020 : ${row["SIKLUS 2020"]}
+        Siklus 2021 : ${row["SIKLUS 2021"]}
+        Siklus 2022 : ${row["SIKLUS 2022"]}
+        Siklus 2023 : ${row["SIKLUS 2023"]}
+        Siklus 2024 : ${row["SIKLUS 2024"]}
+        Siklus 2025 : ${row["SIKLUS 2025"]}
+        `);
+        
+      MarkerISO.addTo(ISOLayer);
+
+      // === LAYER BERDASARKAN SIKLUS ===
+      const Siklus25 = row["SIKLUS 2025"]?.toLowerCase();
+      if (SimbolisasiSiklus[Siklus25]) {
+        const markerSiklus25 = L.marker([lat, lng], { icon: Simbolisasis25(Siklus25) })
+          .bindPopup(`
+        <b>${row["ICAO_CODE"]}</b><br>
+        Kode ICAO : ${row["KABUPATEN"]}
+        Lokasi : ${row["KABUPATEN"]}, ${row["provinsi"]}</br><br>
+        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}</br><br>
+        Siklus 2025 : ${row["SIKLUS 2025"]}
+        `);
+        markerSiklus25.addTo(SiklusIso25Layer);
+      }
+    });
+
+    // Tampilkan salah satu layer default
+    ISOLayer.addTo(map);
+
+    // Layer control
+    const LAYER = {
+      "Simbol Berdasarkan Status ISO": ISOLayer,
+      "Simbol Berdasarkan Siklus 2025": SiklusIso25Layer
+    };
+    L.control.layers(null, LAYER).addTo(map);
+  }
+});
+</script>
+</body>
+</html>
