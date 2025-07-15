@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    .map { height: 100vh; }
+    #map { height: 100vh; }
     .header {
       background-color: #ffffff;
       height: 57px;
@@ -76,13 +76,13 @@ const SiklusIso25Layer = L.layerGroup();
 const SudahSertif = L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png', iconSize: [25, 41], iconAnchor: [12, 41] });
 const BelumSertif = L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', iconSize: [25, 41], iconAnchor: [12, 41] });
 const SimbolisasiSiklus = {
-  'Surveillance 0': 'SkyBlue',
-  'Surveillance 1': 'Turquoise',
-  'Surveillance 2': 'Orange',
-  'Surveillance 3': 'Red',
-  'Renewal' : 'Crimson',
-  'Rencana Sertifikasi' : 'Violet',
-  'Belum Bersertifikat' : 'Darkgrey'
+  'surveillance 0': 'SkyBlue',
+  'surveillance 1': 'Turquoise',
+  'surveillance 2': 'Orange',
+  'surveillance 3': 'Red',
+  'renewal' : 'Crimson',
+  'rencana sertifikasi' : 'Violet',
+  'belum bersertifikat' : 'Darkgrey'
 };
 function Simbolisasis25(Siklus25) {
   const color = SimbolisasiSiklus[Siklus25.toLowerCase()];
@@ -103,12 +103,12 @@ Tabletop.init({
       if (isNaN(lat) || isNaN(lng)) return;
 
       // === LAYER BERDASARKAN STATUS ISO ===
-      let SimbolisasiStatus = row["ISO"].toLowerCase() === "Sudah Tersertifikasi ISO" ? iconSudah : iconBelum;
+      let SimbolisasiStatus = row["ISO"].toLowerCase() === "sudah tersertifikasi iso" ? SudahSertif : BelumSertif;
       const MarkerISO = L.marker([lat, lng], { icon: SimbolisasiStatus })
         .bindPopup(`
         <b>${row["ICAO_CODE"]}</b><br>
-        Kode ICAO : ${row["KABUPATEN"]}
-        Lokasi : ${row["KABUPATEN"]}, ${row["provinsi"]}</br><br>
+        Kode ICAO : ${row["ICAO_CODE"]}
+        Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}</br><br>
         Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}</br><br>
         Siklus 2019 : ${row["SIKLUS 2019"]}
         Siklus 2020 : ${row["SIKLUS 2020"]}
@@ -127,9 +127,9 @@ Tabletop.init({
         const markerSiklus25 = L.marker([lat, lng], { icon: Simbolisasis25(Siklus25) })
           .bindPopup(`
         <b>${row["ICAO_CODE"]}</b><br>
-        Kode ICAO : ${row["KABUPATEN"]}
-        Lokasi : ${row["KABUPATEN"]}, ${row["provinsi"]}</br><br>
-        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}</br><br>
+        Kode ICAO : ${row["KABUPATEN"]}<br>
+        Lokasi : ${row["KABUPATEN"]}, ${row["provinsi"]}<br>
+        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}<br>
         Siklus 2025 : ${row["SIKLUS 2025"]}
         `);
         markerSiklus25.addTo(SiklusIso25Layer);
