@@ -82,7 +82,7 @@ const SimbolisasiSiklus = {
   'surveillance 3': 'Red',
   'renewal' : 'Crimson',
   'rencana sertifikasi' : 'Violet',
-  'belum bersertifikat' : 'Darkgrey'
+  'belum bersertifikat' : 'DarkGrey'
 };
 function Simbolisasis25(Siklus25) {
   const color = SimbolisasiSiklus[Siklus25.toLowerCase()];
@@ -93,7 +93,9 @@ Tabletop.init({
   key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pubhtml",
   wanted: ["ISO"],
   callback: function(data) {
-    const rows = data["ISO"].elements;  // ambil isi sheet ISO
+    console.log("Data Tabletop:", data);
+    const rows = data["ISO"].elements;
+    console.log("Isi Sheet ISO:", rows);
     rows.forEach(row => {
       const lat = parseFloat(row.LAT);
       const lng = parseFloat(row.LONG);
