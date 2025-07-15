@@ -93,7 +93,8 @@ Tabletop.init({
   key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pubhtml",
   wanted: ["ISO"],
   callback: function(data) {
-    data.forEach(row => {
+    const rows = data["ISO"].elements;  // ambil isi sheet ISO
+    rows.forEach(row => {
       const lat = parseFloat(row.LAT);
       const lng = parseFloat(row.LONG);
       if (isNaN(lat) || isNaN(lng)) return;
