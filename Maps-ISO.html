@@ -1,151 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="utf-8">
-  <title>ISO Maps</title>
+  <meta charset="utf-8" />
+  <title>PETA ISO MAP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- Leaflet & Styling -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-layers-tree/L.Control.Layers.Tree.css" />
+  <script src="https://unpkg.com/leaflet-control-layers-tree/L.Control.Layers.Tree.js"></script>
+
+  <!-- PapaParse for CSV -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
   <style>
-    #map { height: 100vh; }
-    .header {
-      background-color: #ffffff;
-      height: 57px;
+    body, html {
+      margin: 0;
+      height: 100%;
+      font-family: Tahoma, sans-serif;
+      font-weight: bold;
+    }
+
+    #map {
+      height: calc(100vh - 2.2cm);
+      margin-top: 1.5cm;
+      margin-bottom: 0.7cm;
+    }
+
+    header {
+      height: 1.5cm;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: white;
       display: flex;
       align-items: center;
-      padding-left: 25px;
-      position: fixed;
-      width: 100%;
+      padding: 0 10px;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .judul-header {
+
+    header img {
+      height: 90%;
+      margin-right: 10px;
+    }
+
+    .header-text {
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-    .baris-atas {
-      font-family: Tahoma, sans-serif;
-      font-size: 14px;
+
+    .header-text div {
+      line-height: 1.1;
+    }
+
+    footer {
+      height: 0.7cm;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background: white;
+      text-align: center;
+      font-size: 12px;
+      line-height: 0.7cm;
+      z-index: 999;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    }
+
+    .title-banner {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      padding: 5px 15px;
+      font-size: 20px;
+      z-index: 998;
       font-weight: bold;
-      color: rgb(0, 0, 0);
-      line-height: 1.2;
-      margin-bottom: 3px
+      border-radius: 5px;
     }
-    .baris-bawah {
-      font-family: Tahoma, sans-serif;
-      font-size: 14px;
-      color: rgb(0, 0, 0);
-      line-height: 1.2;
+
+    .leaflet-control-layers {
+      margin-top: 70px; /* Biar nggak ketutupan header */
     }
-    .header img {
-      height: 80%;
-      margin-right: 2px }
   </style>
 </head>
+
 <body>
-  <div class="header">
-    <img src="Logo.png" alt="Logo BMKG">
-    <div class="judul-header">
-    <div class="baris-atas">Direktorat Meteorologi Penerbangan</div>
-    <div class="baris-bawah">Tim Standarisasi, Prosedur, dan Personil</div>
-  </div>
-  </div>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/BMKG_logo.svg/1200px-BMKG_logo.svg.png" alt="BMKG Logo">
+    <div class="header-text">
+      <div>BMKG</div>
+      <div>Tim SPP</div>
+    </div>
+  </header>
+
   <div id="map"></div>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jsoma/tabletop@master/src/tabletop.js"></script>
+  <div class="title-banner">PETA ISO MAP</div>
+  <footer>prototype by dyah @ bmkg 2025</footer>
+
   <script>
-    const map = L.map('map').setView([-1.3402691200284602, 118.389459726493], 5);
+    const map = L.map('map').setView([-2.5, 117], 5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; CartoDB'
     }).addTo(map);
-/*COBA*/
-function CustomWarna(colorName) {
-  return L.divIcon({
-    html: `<div style="
-      background-color: ${colorName};
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: 0 0 3px rgba(0,0,0,0.5);">
-    </div>`,
-    iconSize: [25, 25],
-    className: ""
-  });
-}
-const ISOLayer = L.layerGroup();
-const SiklusIso25Layer = L.layerGroup();
-const SudahSertif = L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png', iconSize: [25, 41], iconAnchor: [12, 41] });
-const BelumSertif = L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', iconSize: [25, 41], iconAnchor: [12, 41] });
-const SimbolisasiSiklus = {
-  'surveillance 0': 'SkyBlue',
-  'surveillance 1': 'Turquoise',
-  'surveillance 2': 'Orange',
-  'surveillance 3': 'Red',
-  'renewal' : 'Crimson',
-  'rencana sertifikasi' : 'Violet',
-  'belum bersertifikat' : 'DarkGrey'
-};
-function Simbolisasis25(Siklus25) {
-  const color = SimbolisasiSiklus[Siklus25.toLowerCase()];
-  return CustomWarna(color);
-}
-// Load data dari Google Sheets
-Tabletop.init({
-  key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pub?gid=0&single=true&output=csv",
-  wanted: ["ISO"],
-  callback: function(data) {
-    console.log("Data Tabletop:", data);
-    const rows = data["ISO"].elements;
-    console.log("Isi Sheet ISO:", rows);
-    rows.forEach(row => {
-      const lat = parseFloat(row.LAT);
-      const lng = parseFloat(row.LONG);
-      if (isNaN(lat) || isNaN(lng)) return;
 
-      // === LAYER BERDASARKAN STATUS ISO ===
-      let SimbolisasiStatus = row["ISO"].toLowerCase() === "sudah tersertifikasi iso" ? SudahSertif : BelumSertif;
-      const MarkerISO = L.marker([lat, lng], { icon: SimbolisasiStatus })
-        .bindPopup(`
-        <b>${row["STASIUN"]}</b><br>
-        Kode ICAO : ${row["ICAO_CODE"]}<br>
-        Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}<br>
-        Status Sertifikasi : ${row["ISO"]} tahun ${row["Sertifikasi Awal"]}<br>
-        Siklus 2019 : ${row["SIKLUS 2019"]}<br>
-        Siklus 2020 : ${row["SIKLUS 2020"]}<br>
-        Siklus 2021 : ${row["SIKLUS 2021"]}<br>
-        Siklus 2022 : ${row["SIKLUS 2022"]}<br>
-        Siklus 2023 : ${row["SIKLUS 2023"]}<br>
-        Siklus 2024 : ${row["SIKLUS 2024"]}<br>
-        Siklus 2025 : ${row["SIKLUS 2025"]}<br>
-        `);
-        
-      MarkerISO.addTo(ISOLayer);
+    // Layer Groups
+    const isoLayer = L.layerGroup();
+    const siklus25Layer = L.layerGroup();
 
-      // === LAYER BERDASARKAN SIKLUS ===
-      const Siklus25 = row["SIKLUS 2025"]?.toLowerCase();
-      if (SimbolisasiSiklus[Siklus25]) {
-        const markerSkl25 = L.marker([lat, lng], { icon: Simbolisasis25(Siklus25) })
-          .bindPopup(`
-        <b>${row["STASIUN"]}</b><br>
-        Kode ICAO : ${row["ICAO_CODE"]}<br>
-        Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}<br>
-        Status Sertifikasi : ${row["ISO"]} tahun ${row["Sertifikasi Awal"]}<br>
-        Siklus 2025 : ${row["SIKLUS 2025"]}
-        `);
-        markerSkl25.addTo(SiklusIso25Layer);
+    // Warna untuk SIKLUS 2025
+    const siklusColors = {
+      "surveilance 1": "orange",
+      "surveilance 2": "blue",
+      "surveilance 3": "purple",
+      "renewal": "brown"
+    };
+
+    // Load CSV
+    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pub?output=csv';
+
+    Papa.parse(url, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        results.data.forEach(row => {
+          const lat = parseFloat(row['LAT']);
+          const lon = parseFloat(row['LONG']);
+          if (!isNaN(lat) && !isNaN(lon)) {
+            // Layer ISO
+            const colorISO = row['ISO'] === 'Sudah Tersertifikasi' ? 'green' : 'red';
+            const markerISO = L.circleMarker([lat, lon], {
+              radius: 6,
+              color: colorISO,
+              fillOpacity: 0.8
+            }).bindPopup(`<b>${row['NAMA STAMET']}</b><br>ISO: ${row['ISO']}`);
+            isoLayer.addLayer(markerISO);
+
+            // Layer SIKLUS
+            const siklus = row['SIKLUS 2025']?.toLowerCase();
+            const colorSiklus = siklusColors[siklus] || 'gray';
+            const markerSiklus = L.circleMarker([lat, lon], {
+              radius: 6,
+              color: colorSiklus,
+              fillOpacity: 0.8
+            }).bindPopup(`<b>${row['NAMA STAMET']}</b><br>SIKLUS: ${row['SIKLUS 2025']}`);
+            siklus25Layer.addLayer(markerSiklus);
+          }
+        });
       }
     });
 
-    // Tampilkan salah satu layer default
-    ISOLayer.addTo(map);
-
-    // Layer control
-    const LAYER = {
-      "Simbol Berdasarkan Status ISO": ISOLayer,
-      "Simbol Berdasarkan Siklus 2025": SiklusIso25Layer
+    // Layer Control Panel
+    const baseTree = {
+      label: 'Layer Peta',
+      children: [
+        { label: 'Berdasarkan ISO', layer: isoLayer },
+        { label: 'Berdasarkan SIKLUS 2025', layer: siklus25Layer }
+      ]
     };
-    L.control.layers(null, LAYER).addTo(map);
-  }
-});
-</script>
+
+    const layerControl = L.control.layers.tree(null, baseTree, {
+      namedToggle: true,
+      selectorBack: false,
+      closedSymbol: '▶',
+      openedSymbol: '▼'
+    });
+    layerControl.addTo(map);
+  </script>
 </body>
 </html>
