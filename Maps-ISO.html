@@ -7,9 +7,47 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     #map { height: 100vh; }
+    .header {
+      background-color: #ffffff;
+      height: 57px;
+      display: flex;
+      align-items: center;
+      padding-left: 25px;
+      position: fixed;
+      width: 100%;
+    }
+    .judul-header {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .baris-atas {
+      font-family: Tahoma, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      color: rgb(0, 0, 0);
+      line-height: 1.2;
+      margin-bottom: 3px
+    }
+    .baris-bawah {
+      font-family: Tahoma, sans-serif;
+      font-size: 14px;
+      color: rgb(0, 0, 0);
+      line-height: 1.2;
+    }
+    .header img {
+      height: 80%;
+      margin-right: 2px }
   </style>
 </head>
 <body>
+  <div class="header">
+    <img src="Logo.png" alt="Logo BMKG">
+    <div class="judul-header">
+    <div class="baris-atas">Direktorat Meteorologi Penerbangan</div>
+    <div class="baris-bawah">Tim Standarisasi, Prosedur, dan Personil</div>
+  </div>
+  </div>
   <div id="map"></div>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jsoma/tabletop@master/src/tabletop.js"></script>
@@ -52,7 +90,7 @@ function Simbolisasis25(Siklus25) {
 }
 // Load data dari Google Sheets
 Tabletop.init({
-  key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pubhtml",
+  key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pub?output=xlsx",
   wanted: ["ISO"],
   callback: function(data) {
     console.log("Data Tabletop:", data);
