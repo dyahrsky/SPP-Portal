@@ -90,7 +90,7 @@ function Simbolisasis25(Siklus25) {
 }
 // Load data dari Google Sheets
 Tabletop.init({
-  key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pub?output=xlsx",
+  key: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSInJYxkpgLj_UgpLAFCZa4BEpDtdrgUIL2kHId6I94044LFkrJGmD1wQpafsmU0HmYLkM6EJIXsRQG/pub?output=csv",
   wanted: ["ISO"],
   callback: function(data) {
     console.log("Data Tabletop:", data);
@@ -108,7 +108,7 @@ Tabletop.init({
         <b>${row["STASIUN"]}</b><br>
         Kode ICAO : ${row["ICAO_CODE"]}<br>
         Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}<br>
-        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}<br>
+        Status Sertifikasi : ${row["ISO"]} tahun ${row["Sertifikasi Awal"]}<br>
         Siklus 2019 : ${row["SIKLUS 2019"]}<br>
         Siklus 2020 : ${row["SIKLUS 2020"]}<br>
         Siklus 2021 : ${row["SIKLUS 2021"]}<br>
@@ -123,15 +123,15 @@ Tabletop.init({
       // === LAYER BERDASARKAN SIKLUS ===
       const Siklus25 = row["SIKLUS 2025"]?.toLowerCase();
       if (SimbolisasiSiklus[Siklus25]) {
-        const markerSiklus25 = L.marker([lat, lng], { icon: Simbolisasis25(Siklus25) })
+        const markerSkl25 = L.marker([lat, lng], { icon: Simbolisasis25(Siklus25) })
           .bindPopup(`
         <b>${row["STASIUN"]}</b><br>
         Kode ICAO : ${row["ICAO_CODE"]}<br>
         Lokasi : ${row["KABUPATEN"]}, ${row["PROVINSI"]}<br>
-        Status Sertifikasi : ${row["ISO"]} tahun ${row["Serifikasi Awal"]}<br>
+        Status Sertifikasi : ${row["ISO"]} tahun ${row["Sertifikasi Awal"]}<br>
         Siklus 2025 : ${row["SIKLUS 2025"]}
         `);
-        markerSiklus25.addTo(SiklusIso25Layer);
+        markerSkl25.addTo(SiklusIso25Layer);
       }
     });
 
