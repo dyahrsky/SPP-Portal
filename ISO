@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Situs Interaktif Instansi</title>
+    <!-- CSS untuk CartoDB -->
+    <link rel="stylesheet" href="https://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    <!-- CSS untuk C3.js (dashboard) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            /* Tambahkan padding di atas dan di bawah untuk membuat ruang bagi header dan footer yang fixed */
+            padding-top: 80px; 
+            padding-bottom: 60px;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .header {
+            /* Membuat header tetap di atas saat di-scroll */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Memastikan header berada di atas elemen lain */
+            
+            background-color: #fff;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .header .logo {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+        }
+        
+        .header .nama-instansi {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-left: 15px;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2980b9;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        #map {
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            margin-top: 20px;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .dropdown-container {
+            margin-bottom: 20px;
+        }
+
+        .dropdown-container label {
+            font-weight: 600;
+            margin-right: 10px;
+            color: #555;
+        }
+
+        .dropdown-container select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        .footer {
+            /* Membuat footer tetap di bawah saat di-scroll */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #34495e;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bagian 1: Header -->
+    <header class="header">
+        <img src="https://via.placeholder.com/100x100" alt="Logo Instansi" class="logo">
+        <h1 class="nama-instansi">Nama Instansi Anda</h1>
+    </header>
+
+    <div class="container">
+        <!-- Bagian 2: Peta Interaktif -->
+        <h2 class="section-title">Peta Interaktif</h2>
+        <div id="map"></div>
+        <div class="info-map" style="margin-top: 10px; color: #777;">
+            <p>Klik tombol fullscreen di peta untuk tampilan penuh. Gunakan scroll mouse untuk zoom.</p>
+        </div>
+        
+        <!-- Bagian 3: Dashboard Interaktif -->
+        <h2 class="section-title">Dashboard Analisis Data</h2>
+        <div class="dashboard-container">
+            <div class="dropdown-container">
+                <label for="filterDropdown">Pilih Kategori Data:</label>
+                <select id="filterDropdown">
+                    <option value="all">Semua Kategori</option>
+                </select>
+            </div>
+            
+            <div class="chart-grid">
+                <div id="barChart"></div>
+                <div id="pieChart"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bagian 4: Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Instansi Anda. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- Script untuk library JavaScript -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+    <script src="https://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // --- Konfigurasi dan Data ---
+            // ==============================================================================================
+            // !! PENTING: Ganti URL di bawah ini dengan URL CSV yang dipublikasikan dari Google Sheets Anda.
+            // URL ini masih menggunakan contoh placeholder.
+            // Pastikan data memiliki kolom 'latitude', 'longitude', dan 'kategori'
+            const MAP_DATA_URL = 'https://docs.google.com/spreadsheets/d/1234567890abcdefghijklmnopqrstuvwxyz/gviz/tq?tqx=out:csv&sheet=DataPeta';
+            
+            // !! PENTING: Ganti URL di bawah ini dengan URL CSV untuk data dashboard Anda.
+            // Pastikan data memiliki kolom 'kategori', 'nilai1', 'nilai2', dan 'label'
+            const DASHBOARD_DATA_URL = 'https://docs.google.com/spreadsheets/d/1234567890abcdefghijklmnopqrstuvwxyz/gviz/tq?tqx=out:csv&sheet=DataDashboard';
+
+            // ==============================================================================================
+
+            // --- Bagian Peta (CartoDB) ---
+            // Asumsi: Anda telah membuat visualisasi di CartoDB (CARTO)
+            // !! PENTING: Ganti {user} dengan username CartoDB Anda
+            // !! PENTING: Ganti {vis_id} dengan ID visualisasi peta di CartoDB Anda
+            const cartoVisId = '{vis_id}';
+            const cartoUser = '{username}';
+
+            function initMap() {
+                cartodb.createVis('map', `https://${cartoUser}.carto.com/api/v2/viz/${cartoVisId}/viz.json`, {
+                    shareable: false,
+                    title: false,
+                    description: false,
+                    search: false,
+                    cartodb_logo: false,
+                    layer_selector: true, // Mengaktifkan navigasi layer
+                    zoomControl: true,
+                    scrollwheel: true, // Mengaktifkan zoom dengan mouse scroll
+                    fullscreenControl: true // Mengaktifkan tombol fullscreen
+                })
+                .done(function(vis, layers) {
+                    console.log("Peta berhasil dimuat.");
+                })
+                .error(function(err) {
+                    console.error("Gagal memuat peta: " + err);
+                    document.getElementById('map').innerHTML = "<p>Gagal memuat peta. Pastikan URL dan ID visualisasi CartoDB sudah benar.</p>";
+                });
+            }
+            initMap();
+            
+            // --- Bagian Dashboard (C3.js) ---
+            const dropdown = document.getElementById('filterDropdown');
+
+            function loadDashboardData() {
+                d3.csv(DASHBOARD_DATA_URL).then(function(data) {
+                    // Mendapatkan daftar kategori unik
+                    const categories = [...new Set(data.map(d => d.kategori))];
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category;
+                        option.textContent = category;
+                        dropdown.appendChild(option);
+                    });
+
+                    // Event listener untuk dropdown
+                    dropdown.addEventListener('change', function() {
+                        const selectedCategory = this.value;
+                        const filteredData = selectedCategory === 'all' 
+                            ? data 
+                            : data.filter(d => d.kategori === selectedCategory);
+                        drawCharts(filteredData);
+                    });
+
+                    // Gambar chart pertama kali dengan semua data
+                    drawCharts(data);
+                }).catch(function(error) {
+                    console.error("Gagal memuat data dashboard: " + error);
+                    document.querySelector('.dashboard-container').innerHTML = "<p>Gagal memuat data dashboard. Pastikan URL Google Sheets sudah benar dan dipublikasikan.</p>";
+                });
+            }
+
+            function drawCharts(filteredData) {
+                // Konfigurasi Bar Chart
+                const barChartData = {
+                    columns: [['Data', ...filteredData.map(d => +d.nilai1)]],
+                    type: 'bar',
+                    labels: {
+                        format: { 'Data': d3.format('.1f') }
+                    }
+                };
+
+                // Konfigurasi Pie/Donut Chart
+                const pieChartData = {
+                    columns: filteredData.map(d => [d.label, +d.nilai2]),
+                    type: 'donut',
+                };
+
+                // Hapus chart lama sebelum menggambar yang baru
+                document.getElementById('barChart').innerHTML = '';
+                document.getElementById('pieChart').innerHTML = '';
+
+                // Generate Bar Chart
+                c3.generate({
+                    bindto: '#barChart',
+                    data: barChartData,
+                    donut: { title: "Data Bar" },
+                    tooltip: { show: true }
+                });
+
+                // Generate Pie/Donut Chart
+                c3.generate({
+                    bindto: '#pieChart',
+                    data: pieChartData,
+                    donut: { title: "Data Pie" },
+                    tooltip: { show: true }
+                });
+            }
+
+            loadDashboardData();
+        });
+    </script>
+</body>
+</html>
